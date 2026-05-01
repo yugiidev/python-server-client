@@ -16,10 +16,17 @@ def start_client():
   message = input(" > ")
   
   while message.lower().strip() != 'logout':
-    cl_socket.send(message.encode())
-    data = cl_socket.recv(1024).decode()
-    print(f"Received from server: {data}")
-    message = input(" > ")
+    try:
+      cl_socket.sendall(message.encode())
+      data = cl_socket.recv(1024).decode()
+      if not data:
+        print("Connection closed by server.")
+        break
+      print(f"Received from server: {data}")
+      message = input(" > ")
+    except Exception as e:
+      print(f"Connection with server lost. An error occurred: {e}")
+      break
 
   cl_socket.close()
 
