@@ -9,8 +9,16 @@ def start_server():
   sv_socket.bind((host, port)) 
   sv_socket.listen()
 
+  blocked_ips = ["127.0.0.1"]  # Example of blocked IPs
+
   while True: 
     connection, address = sv_socket.accept()
+
+    if address[0] in blocked_ips:
+      print(f"Blocked connection attempt from: {address}")
+      connection.close()
+      continue
+
     print(f"Connection from: {address}")
 
     thread = threading.Thread(target=handle_client, args=(connection, address))
@@ -25,7 +33,7 @@ def handle_client(connection, address):
       if not data:
         break
       print(f"Received from {address}: {data}")
-      connection.send((data).encode())
+      connection.sendall((data).encode())
     except:
       print(f"Connection with {address} closed.")
       break
