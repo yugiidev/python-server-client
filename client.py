@@ -5,11 +5,17 @@ def start_client():
   port = 5500
 
   cl_socket = socket.socket()
-  cl_socket.connect((host, port))
 
+  try:
+    cl_socket.connect((host, port))
+    print("Connected to server at " + host + ":" + str(port))
+  except:
+    print("Connection to server failed.")
+    return
+ 
   message = input(" > ")
   
-  while message.lower().strip() != 'exit':
+  while message.lower().strip() != 'logout':
     cl_socket.send(message.encode())
     data = cl_socket.recv(1024).decode()
     print("Received from server: " + data)
