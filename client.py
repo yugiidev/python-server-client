@@ -8,7 +8,7 @@ def start_client():
 
   try:
     cl_socket.connect((host, port))
-    print("Connected to server at " + host + ":" + str(port))
+    print(f"Connected to server at {host}:{port}")
   except:
     print("Connection to server failed.")
     return
@@ -18,7 +18,7 @@ def start_client():
   while message.lower().strip() != 'logout':
     cl_socket.send(message.encode())
     data = cl_socket.recv(1024).decode()
-    print("Received from server: " + data)
+    print(f"Received from server: {data}")
     message = input(" > ")
 
   cl_socket.close()

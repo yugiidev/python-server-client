@@ -11,11 +11,11 @@ def start_server():
 
   while True: 
     connection, address = sv_socket.accept()
-    print("Connection from: " + str(address))
+    print(f"Connection from: {address}")
 
     thread = threading.Thread(target=handle_client, args=(connection, address))
     thread.start()
-    print("Active connections: " + str(threading.active_count() - 1))
+    print(f"Active connections: {threading.active_count() - 1}")
    
   
 def handle_client(connection, address):
@@ -24,10 +24,10 @@ def handle_client(connection, address):
       data = connection.recv(1024).decode()
       if not data:
         break
-      print("Received from " + str(address) + ": " + data)
+      print(f"Received from {address}: {data}")
       connection.send((data).encode())
     except:
-      print("Connection with " + str(address) + " closed.")
+      print(f"Connection with {address} closed.")
       break
   connection.close()
 
