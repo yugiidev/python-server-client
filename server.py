@@ -38,7 +38,7 @@ def handle_client(connection, address):
       if not data:
         break
       package_received = json.loads(data)
-      print(f"Received from {address}: {package_received['content']}")
+      print(f"{package_received['user']}: {package_received['content']}")
       package_response = {
         "content": f"Server received your message: {package_received['content']}"
       }
