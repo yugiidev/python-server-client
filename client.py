@@ -1,4 +1,5 @@
 import socket
+import json
 
 def start_client():
   host = "127.0.0.1"
@@ -21,12 +22,17 @@ def start_client():
         message = input(" > ")
         continue
       try:
-        cl_socket.sendall(message.encode())
+        package_send = {
+          "content": message
+        }
+        json_message = json.dumps(package_send)
+        cl_socket.sendall(json_message.encode())
         data = cl_socket.recv(1024).decode()
         if not data:
           print("Connection closed by server.")
           break
-        print(f"Received from server: {data}")
+        package_response = json.loads(data)
+        print(package_response['content'])
         message = input(" > ")
       except Exception as e:
         print(f"Connection with server lost. An error occurred: {e}")

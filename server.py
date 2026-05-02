@@ -1,3 +1,4 @@
+import json
 import socket
 import threading
 
@@ -36,8 +37,13 @@ def handle_client(connection, address):
       data = connection.recv(1024).decode()
       if not data:
         break
-      print(f"Received from {address}: {data}")
-      connection.sendall((data).encode())
+      package_received = json.loads(data)
+      print(f"Received from {address}: {package_received['content']}")
+      package_response = {
+        "content": f"Server received your message: {package_received['content']}"
+      }
+      json_response = json.dumps(package_response)
+      connection.sendall(json_response.encode())
     except:
       print(f"Connection with {address} closed.")
       break
