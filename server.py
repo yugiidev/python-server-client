@@ -6,26 +6,30 @@ def start_server():
   port = 5500
 
   sv_socket = socket.socket()
+  sv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
   sv_socket.bind((host, port)) 
   sv_socket.listen()
 
-  blocked_ips = ["127.0.0.1"]  # Example of blocked IPs
+  blocked_ips = ["192.168.1.100"]  # Example of blocked IPs
 
-  while True: 
-    connection, address = sv_socket.accept()
+  try:
+    while True: 
+      connection, address = sv_socket.accept()
 
-    if address[0] in blocked_ips:
-      print(f"Blocked connection attempt from: {address}")
-      connection.close()
-      continue
+      if address[0] in blocked_ips:
+        print(f"Blocked connection attempt from: {address}")
+        connection.close()
+        continue
 
-    print(f"Connection from: {address}")
+      print(f"Connection from: {address}")
 
-    thread = threading.Thread(target=handle_client, args=(connection, address))
-    thread.start()
-    print(f"Active connections: {threading.active_count() - 1}")
-   
-  
+      thread = threading.Thread(target=handle_client, args=(connection, address))
+      thread.start()
+      print(f"Active connections: {threading.active_count() - 1}")
+  except KeyboardInterrupt:
+    print("\nServer is shutting down.")
+    sv_socket.close()
+
 def handle_client(connection, address):
   while True:
     try:
