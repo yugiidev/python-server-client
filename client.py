@@ -15,6 +15,10 @@ def start_client():
     return
 
   try:
+    username = input("Enter your username: ").strip()
+    while not username:
+      print("Username cannot be empty. Please enter a valid username.")
+      username = input("Enter your username: ").strip()
     message = input(" > ")
     while message.lower().strip() != 'logout':
       if message.strip() == "":
@@ -23,6 +27,7 @@ def start_client():
         continue
       try:
         package_send = {
+          "user": username,
           "content": message
         }
         json_message = json.dumps(package_send)
