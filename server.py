@@ -4,7 +4,7 @@ import threading
 import logging
 
 def start_server():
-  host = "127.0.0.1"
+  host = "0.0.0.0"
   port = 5500
 
   sv_socket = socket.socket()
