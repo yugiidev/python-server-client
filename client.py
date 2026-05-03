@@ -1,5 +1,6 @@
 import socket
 import json
+import logging
 
 def start_client():
   host = "127.0.0.1"
@@ -7,22 +8,28 @@ def start_client():
 
   cl_socket = socket.socket()
 
+  logging.basicConfig(
+    filename='client.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+  )
+
   try:
     cl_socket.connect((host, port))
-    print(f"Connected to server at {host}:{port}")
+    logging.info(f"Connected to server at {host}:{port}")
   except:
-    print("Connection to server failed.")
+    logging.error("Connection to server failed.")
     return
 
   try:
     username = input("Enter your username: ").strip()
     while not username:
-      print("Username cannot be empty. Please enter a valid username.")
+      logging.info("Username cannot be empty. Please enter a valid username.")
       username = input("Enter your username: ").strip()
     message = input(" > ")
     while message.lower().strip() != 'logout':
       if message.strip() == "":
-        print("Please enter a valid message.")
+        logging.info("Please enter a valid message.")
         message = input(" > ")
         continue
       try:
@@ -34,16 +41,17 @@ def start_client():
         cl_socket.sendall(json_message.encode())
         data = cl_socket.recv(1024).decode()
         if not data:
+          logging.info("Connection closed by server.")
           print("Connection closed by server.")
           break
         package_response = json.loads(data)
-        print(package_response['content'])
+        logging.info(package_response['content'])
         message = input(" > ")
       except Exception as e:
-        print(f"Connection with server lost. An error occurred: {e}")
+        logging.error(f"Connection with server lost. An error occurred: {e}")
         break
   except KeyboardInterrupt:
-    print("\nClient is shutting down.")
+    logging.info("\nClient is shutting down.")
     cl_socket.close()
 
 if __name__ == '__main__':
