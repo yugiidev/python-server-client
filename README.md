@@ -37,7 +37,7 @@ If you prefer containers, you can build and run the server image:
 
 ```bash
 docker build -t python-server .
-docker run -p 5500:5500 python-server
+docker run -p 5500:5500 --env-file .env python-server
 ```
 
 ## Next Improvements (Roadmap)
@@ -45,4 +45,3 @@ docker run -p 5500:5500 python-server
   - Database Persistence: Store message history in a database instead of only text files.
   - CI/CD Pipeline: Set up a GitHub Actions workflow to validate the code and build the Docker image automatically.
   - User Interface: Build a small GUI or web app for the client.
-  - Environment Variables: Manage settings like host and port via .env files.
