@@ -3,9 +3,14 @@ import socket
 import threading
 import logging
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 def start_server():
   host = "0.0.0.0"
-  port = 5500
+  port = int(os.getenv("port"))
 
   sv_socket = socket.socket()
   sv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

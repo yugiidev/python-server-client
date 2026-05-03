@@ -2,9 +2,14 @@ import socket
 import json
 import logging
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 def start_client():
-  host = "127.0.0.1"
-  port = 5500
+  host = os.getenv("host")
+  port = int(os.getenv("port"))
 
   cl_socket = socket.socket()
 
